@@ -1,22 +1,25 @@
 import json
 import pandas as pd
 import requests
-from tqdm import tqdm
 
 channel_id = <channel_id>
 key = <yt_data_api>
 
 url = f'https://www.googleapis.com/youtube/v3/channels?part=statistics&id={channel_id}&key={key}'
-pbar = tqdm(total=1)
 
 json_url = requests.get(url)
 data = json.loads(json_url.text)
+
 try:
-    data = data['items'][0]['statistics']
+    details = data['items'][0]['statistics']
 except KeyError:
     print('Could not get channel statistics')
-    data = {}
+    details = {}
 
-channel_statistics = pd.DataFrame([data])
-pbar.update()
-pbar.close()
+url = f"https://www.googleapis.com/youtube/v3/search?key={key}&channelId={channel_id}&part=snippet,id&order=date&maxResults=20"
+
+json_url = requests.get(url)
+data = json.loads(json_url.text)
+
+details['channelTitle'] = data['items'][0]['snippet']['channelTitle']
+channel_statistics = pd.DataFrame([details])
