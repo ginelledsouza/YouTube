@@ -5,7 +5,7 @@ import requests
 key = <yt_data_api>
 
 ytdata = pd.DataFrame()
-ytchannel = ["sonymusicindiaSME","sonypalindia","marvel"]
+ytchannel = ["sonymusicindiaSME","sonypalindia","marvel","SuperwomanVlogs","TseriesKannada"]
 
 def retrive_data(url):
 
