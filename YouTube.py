@@ -33,4 +33,14 @@ for i in ytchannel:
     details['channelTitle'] = data['items'][0]['snippet']['channelTitle']
     channel_statistics = pd.DataFrame([details])
     
-    ytdata = ytdata.append(channel_statistics)
+    ytdata = ytdata.append(channel_statistics,ignore_index=False)
+    
+ytdata.reset_index(drop=True,inplace=True)
+
+# Data Analysis
+
+highest = ytdata[ytdata['subscriberCount'] == ytdata['subscriberCount'].max()].index[0]
+print("Highest subscriber count channel title: {}".format(ytdata["channelTitle"][highest]))
+
+lowest = ytdata[ytdata['subscriberCount'] == ytdata['subscriberCount'].min()].index[0]
+print("Lowest subscriber count channel title: {}".format(ytdata["channelTitle"][lowest]))
