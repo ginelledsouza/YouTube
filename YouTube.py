@@ -33,6 +33,13 @@ for i in ytchannel:
     details['channelTitle'] = data['items'][0]['snippet']['channelTitle']
     channel_statistics = pd.DataFrame([details])
     
+    video = []
+
+    for vid in data['items']:
+        video.append(vid['snippet']['title'])
+
+    channel_statistics['recentVideo'] = str(video) 
+    
     ytdata = ytdata.append(channel_statistics,ignore_index=False)
     
 ytdata.reset_index(drop=True,inplace=True)
