@@ -47,7 +47,14 @@ ytdata.reset_index(drop=True,inplace=True)
 # Data Analysis
 
 highest = ytdata[ytdata['subscriberCount'] == ytdata['subscriberCount'].max()].index[0]
-print("Highest subscriber count channel title: {}".format(ytdata["channelTitle"][highest]))
+print("Highest subscriber count channel title: {}\n".format(ytdata["channelTitle"][highest]))
 
 lowest = ytdata[ytdata['subscriberCount'] == ytdata['subscriberCount'].min()].index[0]
-print("Lowest subscriber count channel title: {}".format(ytdata["channelTitle"][lowest]))
+print("Lowest subscriber count channel title: {}\n".format(ytdata["channelTitle"][lowest]))
+
+highest = ytdata[ytdata['viewCount'] == ytdata['viewCount'].max()].index[0]
+print("Highest view count channel title: {}\n".format(ytdata["channelTitle"][highest]))
+
+lowest = ytdata[ytdata['viewCount'] == ytdata['viewCount'].min()].index[0]
+print("Lowest view count channel title: {}\n".format(ytdata["channelTitle"][lowest]))
+
