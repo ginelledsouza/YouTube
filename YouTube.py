@@ -1,6 +1,9 @@
+import re
+import ast
 import json
-import pandas as pd
 import requests
+import pandas as pd
+from collections import Counter
 
 key = <yt_data_api>
 
@@ -26,7 +29,7 @@ for i in ytchannel:
     
     details = data['items'][0]['statistics']
     
-    url = f"https://www.googleapis.com/youtube/v3/search?key={key}&channelId={channel_id}&part=snippet,id&order=date&maxResults=20"
+    url = f"https://www.googleapis.com/youtube/v3/search?key={key}&channelId={channel_id}&part=snippet,id&order=date&maxResults=30"
     
     data = retrive_data(url)
     
@@ -58,3 +61,18 @@ print("Highest view count channel title: {}\n".format(ytdata["channelTitle"][hig
 lowest = ytdata[ytdata['viewCount'] == ytdata['viewCount'].min()].index[0]
 print("Lowest view count channel title: {}\n".format(ytdata["channelTitle"][lowest]))
 
+for i in range(len(ytdata)):
+
+    results = ytdata['recentVideo'][i]
+    results = ast.literal_eval(results)
+    results = "".join(results)
+    results = re.sub('[^A-Za-z0-9]+', ' ', results)
+    results = results.split()
+    
+    CounterVariable = Counter(results)
+    
+    most_occur = CounterVariable.most_common(1)[0][0]
+    
+    ytdata.loc[ytdata.index == i, 'frequentWord'] = most_occur
+    
+    print("'{}' is the most frequent word used by {}\n".format(most_occur,ytdata['channelTitle'][i]))
