@@ -76,3 +76,8 @@ for i in range(len(ytdata)):
     ytdata.loc[ytdata.index == i, 'frequentWord'] = most_occur
     
     print("'{}' is the most frequent word used by {}\n".format(most_occur,ytdata['channelTitle'][i]))
+    
+branding = ytdata.apply(lambda x:x["channelTitle"] if x["frequentWord"] in x["channelTitle"] else '', axis=1).tolist()   
+branding = [x.strip().title() for x in branding if x != '']
+branding = ", ".join(branding)
+print("The YouTube channels '{}' use their own title the most while tweeting!".format(branding))
