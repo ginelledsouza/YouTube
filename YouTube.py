@@ -80,4 +80,4 @@ for i in range(len(ytdata)):
 branding = ytdata.apply(lambda x:x["channelTitle"] if x["frequentWord"] in x["channelTitle"] else '', axis=1).tolist()   
 branding = [x.strip().title() for x in branding if x != '']
 branding = ", ".join(branding)
-print("The YouTube channels '{}' use their own title the most while tweeting!".format(branding))
+print("The YouTube channels '{}' use their own title the most!".format(branding))
