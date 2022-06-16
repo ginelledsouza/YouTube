@@ -61,6 +61,12 @@ print("Highest view count channel title: {}\n".format(ytdata["channelTitle"][hig
 lowest = ytdata[ytdata['viewCount'] == ytdata['viewCount'].min()].index[0]
 print("Lowest view count channel title: {}\n".format(ytdata["channelTitle"][lowest]))
 
+highest = ytdata[ytdata['videoCount'] == ytdata['videoCount'].max()].index[0]
+print("Highest video count channel title: {}\n".format(ytdata["channelTitle"][highest]))
+
+lowest = ytdata[ytdata['videoCount'] == ytdata['videoCount'].min()].index[0]
+print("Lowest video count channel title: {}\n".format(ytdata["channelTitle"][lowest]))
+
 for i in range(len(ytdata)):
 
     results = ytdata['recentVideo'][i]
