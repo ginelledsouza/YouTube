@@ -10,7 +10,7 @@ key = <yt_data_api>
 api_service_name = "youtube"
 api_version = "v3"
 
-#######################################[Searching Channels]#######################################
+####################################### [Searching Channels] #######################################
 
 ytdata = pd.DataFrame()
 ytchannel = ["sonymusicindiaSME","sonypalindia","marvel","SuperwomanVlogs","TseriesKannada"]
@@ -93,8 +93,9 @@ branding = [x.strip().title() for x in branding if x != '']
 branding = ", ".join(branding)
 print("The YouTube channels '{}' use their own title the most!".format(branding))
 
-#######################################[Searching Popular Videos]#######################################
+####################################### [Searching Popular Videos] #######################################
 
+viddata = pd.DataFrame()
 youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey = key)
 
 videos_ids = youtube.search().list(part="id",type='video',regionCode="IN",order="relevance",
@@ -104,14 +105,18 @@ keys, values = zip(*videos_ids.items())
 values = values[0]
 
 for i in values:
-    
+        
     vid = i["id"]["videoId"]
     stat = youtube.videos().list(part="statistics,contentDetails",id=vid,fields="items(statistics," + "contentDetails(duration))").execute()
-
-
-Data = stat['items'][0]["contentDetails"]
-Addons = stat['items'][0]["statistics"]
-
-Data.update(Addons)
-
-Data = pd.DataFrame(Data,index=[0])
+    print(vid)
+    
+    video_statistics = stat['items'][0]["contentDetails"]
+    Addons = stat['items'][0]["statistics"]
+    
+    video_statistics.update(Addons)
+    
+    video_statistics = pd.DataFrame(video_statistics,index=[0])
+    
+    viddata = viddata.append(video_statistics,ignore_index=False)
+    
+viddata.reset_index(drop=True,inplace=True)
