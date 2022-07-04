@@ -95,28 +95,37 @@ print("The YouTube channels '{}' use their own title the most!".format(branding)
 
 ####################################### [Searching Popular Videos] #######################################
 
-viddata = pd.DataFrame()
-youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey = key)
-
-videos_ids = youtube.search().list(part="id",type='video',regionCode="IN",order="relevance",
-                                   q="puppies",maxResults=50,fields="items(id(videoId))").execute()
-
-keys, values = zip(*videos_ids.items())
-values = values[0]
-
-for i in values:
+def searchvid(keyword):
+    
+    keyword = keyword.strip().lower()
+    
+    viddata = pd.DataFrame()
+    youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey = key)
+    
+    videos_ids = youtube.search().list(part="id",type='video',regionCode="IN",order="relevance",
+                                       q=keyword,maxResults=50,fields="items(id(videoId))").execute()
+    
+    keys, values = zip(*videos_ids.items())
+    values = values[0]
+    
+    for i in values:
+            
+        vid = i["id"]["videoId"]
+        stat = youtube.videos().list(part="statistics,contentDetails",id=vid,fields="items(statistics," + "contentDetails(duration))").execute()
+        print(vid)
         
-    vid = i["id"]["videoId"]
-    stat = youtube.videos().list(part="statistics,contentDetails",id=vid,fields="items(statistics," + "contentDetails(duration))").execute()
-    print(vid)
+        video_statistics = stat['items'][0]["contentDetails"]
+        Addons = stat['items'][0]["statistics"]
+        
+        video_statistics.update(Addons)
+        
+        video_statistics = pd.DataFrame(video_statistics,index=[0])
+        
+        viddata = viddata.append(video_statistics,ignore_index=False)
+        
+    viddata.reset_index(drop=True,inplace=True)
     
-    video_statistics = stat['items'][0]["contentDetails"]
-    Addons = stat['items'][0]["statistics"]
-    
-    video_statistics.update(Addons)
-    
-    video_statistics = pd.DataFrame(video_statistics,index=[0])
-    
-    viddata = viddata.append(video_statistics,ignore_index=False)
-    
-viddata.reset_index(drop=True,inplace=True)
+    return viddata
+
+keyword = "Fashion"
+Video = searchvid(keyword)
