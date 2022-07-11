@@ -124,6 +124,7 @@ def searchvid(keyword):
         viddata = viddata.append(video_statistics,ignore_index=False)
         
     viddata.reset_index(drop=True,inplace=True)
+    viddata.rename(columns={"duration":"_id"},inplace=True)
     
     return viddata
 
