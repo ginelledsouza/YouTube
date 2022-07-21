@@ -120,13 +120,23 @@ def searchvid(keyword):
         video_statistics.update(Addons)
         
         video_statistics = pd.DataFrame(video_statistics,index=[0])
+                
+        video_id = i["id"]["videoId"]
+        url = f"https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&id={video_id}&key={key}"
+        data = retrive_data(url)
+                
+        video_statistics["channel_title"] = data['items'][0]["snippet"]["channelTitle"]
+        video_statistics["video_title"] = data['items'][0]["snippet"]["localized"]["title"]
+        video_statistics["video_description"] = data['items'][0]["snippet"]["localized"]["description"]
         
         viddata = viddata.append(video_statistics,ignore_index=False)
         
     viddata.reset_index(drop=True,inplace=True)
     viddata.rename(columns={"duration":"_id"},inplace=True)
     
+    viddata = viddata[["_id","channel_title","video_title","video_description","viewCount","likeCount","favoriteCount","commentCount"]]
+    
     return viddata
 
-keyword = "Education"
+keyword = "Fashion"
 Video = searchvid(keyword)
