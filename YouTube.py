@@ -140,3 +140,17 @@ def searchvid(keyword):
 
 keyword = "Fashion"
 Video = searchvid(keyword)
+
+####################################### [Analyzing Popular Videos] #######################################
+
+popularChannels = Video["channel_title"].value_counts().reset_index().rename(columns={"index":"Channel Title","channel_title":"Count"})
+popularChannels = popularChannels[popularChannels["Count"]>1]
+
+print("The following channels have created majority of videos: {}".format(", ".join(popularChannels["Channel Title"].tolist())))
+
+viewCount = Video.sort_values("viewCount",ascending=False).head(20).reset_index(drop=True)
+
+viewCount = viewCount["channel_title"].value_counts().reset_index().rename(columns={"index":"Channel Title","channel_title":"Count"})
+viewCount = viewCount[viewCount["Count"]>1]
+
+print("Among the most popular videos the following channels have the most views: {}".format(", ".join(viewCount["Channel Title"].tolist())))
